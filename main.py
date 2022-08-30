@@ -1,17 +1,20 @@
+import os
 import PySimpleGUI as sg
 from PIL import ImageGrab
 
 def main():
-    filename = "screenshot.png"
+    RESIZE_RATIO = 2.5
+    FILENAME = os.path.join(os.getenv("TEMP"), "screenshot.png")
+
     img = ImageGrab.grab(all_screens=True)
-    img_resized = img.resize((int(img.width / 2), int(img.height / 2)))
-    img_resized.save(filename)
+    img_resized = img.resize((int(img.width / RESIZE_RATIO), int(img.height / RESIZE_RATIO)))
+    img_resized.save(FILENAME)
 
     layout = [
-        [sg.Image(filename)]
+        [sg.Image(FILENAME)]
     ]
 
-    window = sg.Window("title", layout)
+    window = sg.Window("QR Reader", layout)
 
     while True:
         event, values = window.read()
