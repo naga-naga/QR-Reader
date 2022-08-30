@@ -5,14 +5,16 @@ from PIL import ImageGrab
 
 def main():
     RESIZE_RATIO = 2.5
-    FILENAME = os.path.join(os.getenv("TEMP"), "screenshot.png")
+    TEMP_DIR = os.getenv("TEMP")
+    FILENAME_SCREENSHOT = os.path.join(TEMP_DIR, "screenshot.png")
+    FILENAME_CROP = os.path.join(TEMP_DIR, "crop.png")
 
     img = ImageGrab.grab(all_screens=True)
     resized_width = int(img.width / RESIZE_RATIO)
     resized_height = int(img.height / RESIZE_RATIO)
     resized_size = (resized_width, resized_height)
     resized_img = img.resize(resized_size)
-    resized_img.save(FILENAME)
+    resized_img.save(FILENAME_SCREENSHOT)
 
     layout = [
         [
@@ -30,7 +32,7 @@ def main():
 
     window = sg.Window("QR Reader", layout, finalize=True)
     graph: sg.Graph = window["GRAPH"]
-    graph.draw_image(filename=FILENAME, location=(0, resized_height))
+    graph.draw_image(filename=FILENAME_SCREENSHOT, location=(0, resized_height))
     graph.update()
     graph.bind("<ButtonPress-1>", "_Press")
     graph.bind("<Button1-Motion>", "_Motion")
@@ -83,8 +85,8 @@ def main():
                 start_y, end_y = end_y, start_y
             print(start_x, start_y, end_x, end_y)
 
-            qr_image = img.crop((start_x, start_y, end_x, end_y))
-            qr_image.save("qr.png")
+            img_crop = img.crop((start_x, start_y, end_x, end_y))
+            img_crop.save(FILENAME_CROP)
 
     window.close()
 
