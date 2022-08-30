@@ -46,9 +46,11 @@ def main():
 
         if event == sg.WINDOW_CLOSED:
             break
+        # 画像をクリックしたとき
         elif event == "GRAPH_Press":
             drag_from = values["GRAPH"]
             print(drag_from)
+        # 画像をドラッグしているとき
         elif event == "GRAPH_Motion":
             cursor_pos = values["GRAPH"]
             print(cursor_pos)
@@ -62,6 +64,7 @@ def main():
                 line_color="red",
                 line_width=3)
             graph.update()
+        # クリックをやめたとき
         elif event == "GRAPH_Release":
             print("-----")
 
