@@ -51,11 +51,9 @@ def main():
         # 画像をクリックしたとき
         elif event == "GRAPH_Press":
             drag_from = values["GRAPH"]
-            print(drag_from)
         # 画像をドラッグしているとき
         elif event == "GRAPH_Motion":
             cursor_pos = values["GRAPH"]
-            print(cursor_pos)
 
             if prev_rectangle is not None:
                 graph.delete_figure(prev_rectangle)
@@ -68,8 +66,6 @@ def main():
             graph.update()
         # クリックをやめたとき
         elif event == "GRAPH_Release":
-            print("-----")
-
             # 元の縮尺に戻す
             # また，y 座標は上下反転しているので，それも戻す
             start_x = drag_from[0] * RESIZE_RATIO
@@ -83,7 +79,6 @@ def main():
                 start_x, end_x = end_x, start_x
             if start_y > end_y:
                 start_y, end_y = end_y, start_y
-            print(start_x, start_y, end_x, end_y)
 
             img_crop = img.crop((start_x, start_y, end_x, end_y))
             img_crop.save(FILENAME_CROP)
@@ -95,7 +90,8 @@ def main():
 
             if data == "":
                 print("QR code is not detected.")
-            print(data)
+            else:
+                print(data)
 
     window.close()
 
