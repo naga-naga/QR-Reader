@@ -36,12 +36,34 @@ def main():
     graph.bind("<Button1-Motion>", "_Motion")
     graph.bind("<ButtonRelease-1>", "_Release")
 
+    drag_from = None
+    cursor_pos = None
+    prev_rectangle = None
+
     while True:
         event, values = window.read()
-        print(event, values)
+        # print(event, values)
 
         if event == sg.WINDOW_CLOSED:
             break
+        elif event == "GRAPH_Press":
+            drag_from = values["GRAPH"]
+            print(drag_from)
+        elif event == "GRAPH_Motion":
+            cursor_pos = values["GRAPH"]
+            print(cursor_pos)
+
+            if prev_rectangle is not None:
+                graph.delete_figure(prev_rectangle)
+
+            prev_rectangle = graph.draw_rectangle(
+                top_left=drag_from,
+                bottom_right=cursor_pos,
+                line_color="red",
+                line_width=3)
+            graph.update()
+        elif event == "GRAPH_Release":
+            print("-----")
 
     window.close()
 
