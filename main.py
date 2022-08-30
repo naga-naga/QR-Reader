@@ -1,4 +1,3 @@
-from ctypes import resize
 import os
 import PySimpleGUI as sg
 from PIL import ImageGrab
