@@ -1,4 +1,5 @@
 import os
+import cv2
 import PySimpleGUI as sg
 from PIL import ImageGrab
 
@@ -86,6 +87,15 @@ def main():
 
             img_crop = img.crop((start_x, start_y, end_x, end_y))
             img_crop.save(FILENAME_CROP)
+
+            # OpenCV の画像に変換するのが面倒だったので新しく読み込んでいる
+            img_cv2 = cv2.imread(FILENAME_CROP)
+            qr_detector = cv2.QRCodeDetector()
+            data, _, _ = qr_detector.detectAndDecode(img_cv2)
+
+            if data == "":
+                print("QR code is not detected.")
+            print(data)
 
     window.close()
 
