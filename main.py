@@ -1,3 +1,4 @@
+from ctypes import resize
 import os
 import PySimpleGUI as sg
 from PIL import ImageGrab
@@ -7,17 +8,37 @@ def main():
     FILENAME = os.path.join(os.getenv("TEMP"), "screenshot.png")
 
     img = ImageGrab.grab(all_screens=True)
-    img_resized = img.resize((int(img.width / RESIZE_RATIO), int(img.height / RESIZE_RATIO)))
-    img_resized.save(FILENAME)
+    resized_width = int(img.width / RESIZE_RATIO)
+    resized_height = int(img.height / RESIZE_RATIO)
+    resized_size = (resized_width, resized_height)
+    resized_img = img.resize(resized_size)
+    resized_img.save(FILENAME)
 
     layout = [
-        [sg.Image(FILENAME)]
+        [
+            sg.Graph(
+                canvas_size=resized_size,
+                graph_bottom_left=(0, 0),
+                graph_top_right=resized_size,
+                background_color="white",
+                enable_events=True,
+                drag_submits=True,
+                key="GRAPH"
+            ),
+        ],
     ]
 
-    window = sg.Window("QR Reader", layout)
+    window = sg.Window("QR Reader", layout, finalize=True)
+    graph: sg.Graph = window["GRAPH"]
+    graph.draw_image(filename=FILENAME, location=(0, resized_height))
+    graph.update()
+    graph.bind("<ButtonPress-1>", "_Press")
+    graph.bind("<Button1-Motion>", "_Motion")
+    graph.bind("<ButtonRelease-1>", "_Release")
 
     while True:
         event, values = window.read()
+        print(event, values)
 
         if event == sg.WINDOW_CLOSED:
             break
