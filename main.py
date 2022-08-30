@@ -68,6 +68,24 @@ def main():
         elif event == "GRAPH_Release":
             print("-----")
 
+            # 元の縮尺に戻す
+            # また，y 座標は上下反転しているので，それも戻す
+            start_x = drag_from[0] * RESIZE_RATIO
+            start_y = img.height - drag_from[1] * RESIZE_RATIO
+            end_x = cursor_pos[0] * RESIZE_RATIO
+            end_y = img.height - cursor_pos[1] * RESIZE_RATIO
+
+            # 始点の座標が終点の座標より大きいとトリミングの際にエラーとなるため
+            # 該当する場合は入れ替えておく
+            if start_x > end_x:
+                start_x, end_x = end_x, start_x
+            if start_y > end_y:
+                start_y, end_y = end_y, start_y
+            print(start_x, start_y, end_x, end_y)
+
+            qr_image = img.crop((start_x, start_y, end_x, end_y))
+            qr_image.save("qr.png")
+
     window.close()
 
 if __name__ == "__main__":
