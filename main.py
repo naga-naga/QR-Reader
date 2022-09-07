@@ -1,5 +1,7 @@
 import os
 import cv2
+import pyautogui
+import pyperclip
 import PySimpleGUI as sg
 from PIL import ImageGrab
 
@@ -92,6 +94,10 @@ def main():
                 print("QR code is not detected.")
             else:
                 print(data)
+                pyperclip.copy(data)
+
+                text = "読み取った内容をクリップボードにコピーしました。\n\n内容: " + data
+                pyautogui.alert(text)
 
     window.close()
 
