@@ -91,7 +91,7 @@ def main():
             data, _, _ = qr_detector.detectAndDecode(img_cv2)
 
             if data == "":
-                print("QR code is not detected.")
+                print("QR code was not detected.")
             else:
                 print(data)
                 pyperclip.copy(data)
